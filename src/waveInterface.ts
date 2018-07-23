@@ -1,7 +1,7 @@
 import encodeWAV from './waveEncoder';
 
 export default class WAVEInterface {
-  static audioContext = new AudioContext();
+  static audioContext = new (window["AudioContext"] || window["webkitAudioContext"])();
   static bufferSize = 2048;
 
   playbackNode: AudioBufferSourceNode;
