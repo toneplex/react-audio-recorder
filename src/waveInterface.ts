@@ -43,11 +43,9 @@ export default class WAVEInterface {
   
           this.recordingStream = stream;
           this.recordingNodes.push(recSourceNode, recGainNode, recProcessingNode);
-          console.log('stream');
           resolve(stream);
         })
         .catch((err) => {
-          console.log('reject error', err);
           reject(err);  
         });
     });

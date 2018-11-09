@@ -47,11 +47,9 @@ var WAVEInterface = /** @class */ (function () {
                 recProcessingNode.connect(audioContext.destination);
                 _this.recordingStream = stream;
                 _this.recordingNodes.push(recSourceNode, recGainNode, recProcessingNode);
-                console.log('stream');
                 resolve(stream);
             })
                 .catch(function (err) {
-                console.log('reject error', err);
                 reject(err);
             });
         });
