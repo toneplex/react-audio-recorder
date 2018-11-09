@@ -2341,6 +2341,11 @@ get-stream@3.0.0, get-stream@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-3.0.0.tgz#8e943d1358dc37555054ecbe2edb05aa174ede14"
 
+get-user-media-promise@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/get-user-media-promise/-/get-user-media-promise-1.1.4.tgz#cf6b460bbf23b6b273c329899d0dc0d901e719a6"
+  integrity sha512-k49YuV2z0d3gKHLPTFKYfzEA9kduuQk7YBf8ev2dxrKk+DhMyuzfQnK9ZSxkEhE/jv3BZY62M0eICWa7lak9nw==
+
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/get-value/-/get-value-2.0.6.tgz#dc15ca1c672387ca76bd37ac0a395ba2042a2c28"
@@ -4653,15 +4658,6 @@ rc@^1.1.7:
 react-dom@^16.3.2:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
-  dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
-
-react@^16.3.2:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.3.2.tgz#fdc8420398533a1e58872f59091b272ce2f91ea9"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"

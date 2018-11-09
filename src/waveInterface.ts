@@ -1,7 +1,9 @@
 import encodeWAV from './waveEncoder';
+import getAudioContext from './getAudioContext';
+import getUserMedia from 'get-user-media-promise';
 
 export default class WAVEInterface {
-  static audioContext = new (window["AudioContext"] || window["webkitAudioContext"])();
+  static audioContext = getAudioContext;
   static bufferSize = 2048;
 
   playbackNode: AudioBufferSourceNode;
@@ -18,32 +20,36 @@ export default class WAVEInterface {
 
   startRecording() {
     return new Promise((resolve, reject) => {
-      navigator.getUserMedia({ audio: true }, (stream) => {
-        const { audioContext } = WAVEInterface;
-        const recGainNode = audioContext.createGain();
-        const recSourceNode = audioContext.createMediaStreamSource(stream);
-        const recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
-        if (this.encodingCache) this.encodingCache = null;
-
-        recProcessingNode.onaudioprocess = (event) => {
+      getUserMedia({ audio: true })
+        .then((stream) => {
+          const { audioContext } = WAVEInterface;
+          const recGainNode = audioContext.createGain();
+          const recSourceNode = audioContext.createMediaStreamSource(stream);
+          const recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
           if (this.encodingCache) this.encodingCache = null;
-          // save left and right buffers
-          for (let i = 0; i < 2; i++) {
-            const channel = event.inputBuffer.getChannelData(i);
-            this.buffers[i].push(new Float32Array(channel));
-          }
-        };
-
-        recSourceNode.connect(recGainNode);
-        recGainNode.connect(recProcessingNode);
-        recProcessingNode.connect(audioContext.destination);
-
-        this.recordingStream = stream;
-        this.recordingNodes.push(recSourceNode, recGainNode, recProcessingNode);
-        resolve(stream);
-      }, (err) => {
-        reject(err);
-      });
+  
+          recProcessingNode.onaudioprocess = (event) => {
+            if (this.encodingCache) this.encodingCache = null;
+            // save left and right buffers
+            for (let i = 0; i < 2; i++) {
+              const channel = event.inputBuffer.getChannelData(i);
+              this.buffers[i].push(new Float32Array(channel));
+            }
+          };
+  
+          recSourceNode.connect(recGainNode);
+          recGainNode.connect(recProcessingNode);
+          recProcessingNode.connect(audioContext.destination);
+  
+          this.recordingStream = stream;
+          this.recordingNodes.push(recSourceNode, recGainNode, recProcessingNode);
+          console.log('stream');
+          resolve(stream);
+        })
+        .catch((err) => {
+          console.log('reject error', err);
+          reject(err);  
+        });
     });
   }
 

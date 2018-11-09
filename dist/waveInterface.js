@@ -1,4 +1,6 @@
 import encodeWAV from './waveEncoder';
+import getAudioContext from './getAudioContext';
+import getUserMedia from 'get-user-media-promise';
 var WAVEInterface = /** @class */ (function () {
     function WAVEInterface() {
         this.recordingNodes = [];
@@ -23,7 +25,8 @@ var WAVEInterface = /** @class */ (function () {
     WAVEInterface.prototype.startRecording = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            navigator.getUserMedia({ audio: true }, function (stream) {
+            getUserMedia({ audio: true })
+                .then(function (stream) {
                 var audioContext = WAVEInterface.audioContext;
                 var recGainNode = audioContext.createGain();
                 var recSourceNode = audioContext.createMediaStreamSource(stream);
@@ -44,8 +47,11 @@ var WAVEInterface = /** @class */ (function () {
                 recProcessingNode.connect(audioContext.destination);
                 _this.recordingStream = stream;
                 _this.recordingNodes.push(recSourceNode, recGainNode, recProcessingNode);
+                console.log('stream');
                 resolve(stream);
-            }, function (err) {
+            })
+                .catch(function (err) {
+                console.log('reject error', err);
                 reject(err);
             });
         });
@@ -92,7 +98,7 @@ var WAVEInterface = /** @class */ (function () {
         this.stopRecording();
         this.buffers = [[], []];
     };
-    WAVEInterface.audioContext = new (window["AudioContext"] || window["webkitAudioContext"])();
+    WAVEInterface.audioContext = getAudioContext;
     WAVEInterface.bufferSize = 2048;
     return WAVEInterface;
 }());
