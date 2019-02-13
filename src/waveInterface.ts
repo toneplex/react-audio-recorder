@@ -2,6 +2,8 @@ import encodeWAV from './waveEncoder';
 import getAudioContext from './getAudioContext';
 import getUserMedia from 'get-user-media-promise';
 
+var recGainNode, recSourceNode, recProcessingNode;
+
 export default class WAVEInterface {
   static audioContext = getAudioContext;
   static bufferSize = 2048;
@@ -22,10 +24,10 @@ export default class WAVEInterface {
     return new Promise((resolve, reject) => {
       getUserMedia({ audio: true })
         .then((stream) => {
-          const { audioContext } = WAVEInterface;
-          const recGainNode = audioContext.createGain();
-          const recSourceNode = audioContext.createMediaStreamSource(stream);
-          const recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
+          var { audioContext } = WAVEInterface;
+          recGainNode = audioContext.createGain();
+          recSourceNode = audioContext.createMediaStreamSource(stream);
+          recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
           if (this.encodingCache) this.encodingCache = null;
   
           recProcessingNode.onaudioprocess = (event) => {

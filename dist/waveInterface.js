@@ -1,6 +1,7 @@
 import encodeWAV from './waveEncoder';
 import getAudioContext from './getAudioContext';
 import getUserMedia from 'get-user-media-promise';
+var recGainNode, recSourceNode, recProcessingNode;
 var WAVEInterface = /** @class */ (function () {
     function WAVEInterface() {
         this.recordingNodes = [];
@@ -28,9 +29,9 @@ var WAVEInterface = /** @class */ (function () {
             getUserMedia({ audio: true })
                 .then(function (stream) {
                 var audioContext = WAVEInterface.audioContext;
-                var recGainNode = audioContext.createGain();
-                var recSourceNode = audioContext.createMediaStreamSource(stream);
-                var recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
+                recGainNode = audioContext.createGain();
+                recSourceNode = audioContext.createMediaStreamSource(stream);
+                recProcessingNode = audioContext.createScriptProcessor(WAVEInterface.bufferSize, 2, 2);
                 if (_this.encodingCache)
                     _this.encodingCache = null;
                 recProcessingNode.onaudioprocess = function (event) {
